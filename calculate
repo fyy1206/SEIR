@@ -1,0 +1,43 @@
+# -*- coding: utf-8 -*-
+
+
+r_X2=[497,500,1332,1542,1836,2144]
+r_X3=[94,169,227,326,380,441]
+r_X4=[27,29,31,37,45,54]
+
+import numpy as np
+from scipy.optimize import minimize
+
+
+def calc(X):
+    a=X[0]
+    b=1/7
+    c=X[1]
+    N=189000
+    S=[]
+    S.append(N-497-94-27)
+    E=[]
+    E.append(497)
+    I=[]
+    I.append(94)
+    R=[]
+    R.append(27)
+    
+    for i in range(0, 5):
+        S.append(S[i] - a *  S[i] * I[i] / N - a * E[i] *S [i] / N)
+        E.append(E[i] + a * S[i] * I[i] / N + a * E[i] *S [i] / N - b * E[i])
+        I.append(I[i] + b * E[i] - c * I[i])
+        R.append(R[i] + c * I[i])
+    return [S,E,I,R]
+
+def costfun(X):
+    F=calc(X)
+    c1=np.array(F[1])-np.array(r_X2)
+    c2=np.array(F[2])-np.array(r_X3)
+    c3=np.array(F[3])-np.array(r_X4)
+    return (c1**2).sum()+(c2**2).sum()+(c3**2).sum()
+
+solution=minimize(costfun,[0.1,0.1],method='nelder-mead')
+
+print('lambda:',solution.x[0])
+print('miu:',solution.x[1])
