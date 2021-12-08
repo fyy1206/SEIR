@@ -1,6 +1,6 @@
 # SEIR
 社会网络分析作业
-calculate.py
+calculate.py\n
   用于参数辨识，lambda表示潜伏者和感染者每日平均感染人数，miu表示移除率。
   参考文献说明平均期为7天，则直接设定潜伏者转化为感染者的概率delta为1/7。
   a即lamda
