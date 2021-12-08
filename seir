@@ -1,0 +1,66 @@
+# -*- coding: utf-8 -*-
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+N=189000
+
+a=0.4131        #r=10
+b=1/7
+c=0.1570
+def seirfun(invalue,T):
+    S=[invalue[0]]
+    E=[invalue[1]]
+    I=[invalue[2]]
+    R=[invalue[3]]
+    for i in range(0, T):
+        S.append(S[i] - a *  S[i] * I[i] / N - a * E[i] *S [i] / N)
+        E.append(E[i] + a * S[i] * I[i] / N + a * E[i] *S [i] / N - b * E[i])
+        I.append(I[i] + b * E[i] - c * I[i])
+        R.append(R[i] + c * I[i])
+    return [S,E,I,R]
+INIT=[N-2144-441-54,2144,441,54]
+T=150
+RES=np.array(seirfun(INIT,T)).transpose()
+E=RES[:,1]
+I=RES[:,2]
+E_max=max(E)
+I_max=max(I)
+
+plt.plot(RES[:,0],color = 'darkblue',label = 'Susceptible',marker = '.')
+plt.plot(RES[:,1],color = 'orange',label = 'Exposed',marker = '.')
+
+
+plt.plot(RES[:,2],color = 'red',label = 'Infection',marker = '.')
+plt.plot(RES[:,3],color = 'green',label = 'Recovery',marker = '.')
+
+
+plt.title('SEIR Model')
+plt.legend()
+plt.xlabel('Day')
+plt.ylabel('Number')
+plt.show()
+
+a=0.4131*0.5   #r=5
+RES1=np.array(seirfun(INIT,T)).transpose()
+E1=RES1[:,1]
+I1=RES1[:,2]
+E1_max=max(E1)
+I1_max=max(I1)
+plt.plot(RES1[:,0],color = 'darkblue',label = 'Susceptible',marker = '.')
+plt.plot(RES1[:,1],color = 'orange',label = 'Exposed',marker = '.')
+
+
+plt.plot(RES1[:,2],color = 'red',label = 'Infection',marker = '.')
+plt.plot(RES1[:,3],color = 'green',label = 'Recovery',marker = '.')
+
+
+plt.title('SEIR Model')
+plt.legend()
+plt.xlabel('Day')
+plt.ylabel('Number')
+plt.show()
+
+print('潜伏者减少比例',(E_max-E1_max)/E_max*100,'%')
+print('感染者减少比例',(I_max-I1_max)/I_max*100,'%')
